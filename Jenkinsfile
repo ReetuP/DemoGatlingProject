@@ -1,33 +1,35 @@
 pipeline {
     agent any
-    tools {
-    maven 'Maven 3.8.1'
-    jdk 'jdk8'
+     tools {
+        maven 'Maven 3.8.1'
+        jdk 'jdk8'
     }
     stages {
-    stage ("Initialize"){
-    steps {
-    sh '''
-    echo "PATH=${PATH}"
-    echo "M2_HOME=${M2_HOME}"
-    '''
-    }
-    }
-    stages {
-        stage("Build Maven") {
+        stage ("Initialize"){
             steps {
-                bat 'mvn -B clean package'
-            }
-        }
-        stage("Run Gatling") {
-            steps {
-                bat 'mvn gatling:test'
-            }
-            post {
-                always {
-                    gatlingArchive()
-                }
-            }
+            sh '''
+            echo "PATH=${PATH}"
+            echo "M2_HOME=${M2_HOME}"
+            '''
+    }
+   }
+   stage("Build Maven") {
+               steps {
+                   bat 'mvn -B clean package'
+               }
+
+           stage("Run Gatling") {
+               steps {
+                   bat 'mvn gatling:test'
+               }
+               post {
+                   always {
+                       gatlingArchive()
+                   }
+               }
+  }
+
+
         }
     }
 }
