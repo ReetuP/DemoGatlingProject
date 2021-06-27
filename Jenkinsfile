@@ -1,50 +1,51 @@
 pipeline {
-    agent any
-     tools {
-        maven 'Maven_Home'
-        jdk 'jdk8'
+  agent any
+  tools {
+    maven 'Maven_Home'
+    jdk 'jdk8'
+  }
+  stages {
+    stage("Initialize") {
+      steps {
+        bat ''
+        '
+        echo "PATH=${PATH}"
+        echo "M2_HOME=${M2_HOME}"
+        ''
+        '
+      }
     }
-    stages {
-        stage ("Initialize"){
-            steps {
-            bat '''
-            echo "PATH=${PATH}"
-            echo "M2_HOME=${M2_HOME}"
-            '''
-              }
+    stage("Build Maven") {
+      steps {
+        bat 'mvn -B clean package'
+      }
+    }
+    stage("Run BasicSimulation") {
+      when {
+        expression {
+          return params.Simulation == 'BasicSimulation'
         }
-        stage("Build Maven") {
-               steps {
-                   bat 'mvn -B clean package'
-               }
+      }
+      steps {
+        // bat 'mvn gatling:test'
+        bat 'mvn gatling:test -Dgatling.simulationClass=computerdatabase.BasicSimulation'
+      }
+    }
+    stage("Run ComputerSimulation") {
+      when {
+        expression {
+          return params.Simulation == 'ComputerSimulation'
         }
-        stage("Run BasicSimulation"){
-        when{
-            expression {
-            return params.Simulation == 'BasicSimulation'
-            }
-            }
-               steps {
-                  // bat 'mvn gatling:test'
-                  bat 'mvn gatling:test -Dgatling.simulationClass=computerdatabase.BasicSimulation'
-               }
-             }
-        stage("Run ComputerSimulation"){
-        when{
-            expression{
-            return params.Simulation == 'ComputerSimulation'
-            }
-        }
-         steps {
-                      // bat 'mvn gatling:test'
-                        bat 'mvn gatling:test -Dgatling.simulationClass=computerdatabase.ComputerSimulation'
-         }
-         }
-               post {
-                   always {
-                       gatlingArchive()
-                   }
-            }
-        }
- }
- }
+      }
+      steps {
+        // bat 'mvn gatling:test'
+        bat 'mvn gatling:test -Dgatling.simulationClass=computerdatabase.ComputerSimulation'
+      }
+    }
+    post {
+      always {
+        gatlingArchive()
+      }
+    }
+  }
+}
