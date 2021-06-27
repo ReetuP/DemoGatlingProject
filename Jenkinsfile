@@ -28,6 +28,11 @@ pipeline {
         // bat 'mvn gatling:test'
         bat 'mvn gatling:test -Dgatling.simulationClass=computerdatabase.BasicSimulation'
       }
+      post {
+            always {
+              gatlingArchive()
+            }
+          }
     }
     stage("Run ComputerSimulation") {
       when {
@@ -39,10 +44,10 @@ pipeline {
         // bat 'mvn gatling:test'
         bat 'mvn gatling:test -Dgatling.simulationClass=computerdatabase.ComputerSimulation'
       }
-    }
-    post {
-      always {
-        gatlingArchive()
+      post {
+            always {
+              gatlingArchive()
+            }
       }
     }
   }
