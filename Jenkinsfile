@@ -12,11 +12,12 @@ pipeline {
             echo "M2_HOME=${M2_HOME}"
             '''
               }
+        }
         stage("Build Maven") {
                steps {
                    bat 'mvn -B clean package'
                }
-
+        }
         stage("Run Gatling") {
                steps {
                    bat 'mvn gatling:test'
@@ -27,7 +28,5 @@ pipeline {
                    }
                }
         }
-      }
-   }
-}
+    }
 }
