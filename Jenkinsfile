@@ -20,7 +20,8 @@ pipeline {
         }
         stage("Run Gatling") {
                steps {
-                   bat 'mvn gatling:test'
+                  // bat 'mvn gatling:test'
+                  bat 'mvn -Dgatling.simulationClass=BasicSimulation gatling:execute'
                }
                post {
                    always {
