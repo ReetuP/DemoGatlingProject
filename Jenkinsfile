@@ -18,7 +18,7 @@ pipeline {
                    bat 'mvn -B clean package'
                }
         }
-        stage("Run Basic Simulation") {
+        stage("Run BasicSimulation"){
         when{
             expression {
             return params.Simulation == 'BasicSimulation'
@@ -29,7 +29,7 @@ pipeline {
                   bat 'mvn gatling:test -Dgatling.simulationClass=computerdatabase.BasicSimulation'
                }
              }
-        stage("Run ComputerSimulation")
+        stage("Run ComputerSimulation"){
         when{
             expression{
             return params.Simulation == 'ComputerSimulation'
@@ -46,4 +46,5 @@ pipeline {
                    }
             }
         }
+ }
  }
